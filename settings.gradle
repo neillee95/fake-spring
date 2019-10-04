@@ -1,0 +1,5 @@
+rootProject.name = 'fake-spring'
+
+include 'framework'
+include 'app'
+
