@@ -3,7 +3,6 @@ package me.lee.fakespring.framework.web.handler;
 import com.alibaba.fastjson.JSON;
 import me.lee.fakespring.framework.beans.BeanFactory;
 import me.lee.fakespring.framework.web.annotation.RequestParam;
-import me.lee.fakespring.framework.web.server.HttpStatus;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -39,7 +38,7 @@ public class MappingHandler {
                 Object param = req.getParameter(args[i].value());
                 if (param == null) {
                     if (args[i].required()) {
-                        ((HttpServletResponse) resp).sendError(HttpStatus.BAD_REQUEST, "Bad request.");
+                        ((HttpServletResponse) resp).sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request.");
                         return true;
                     } else {
                         params[i] = args[i].defaultValue();

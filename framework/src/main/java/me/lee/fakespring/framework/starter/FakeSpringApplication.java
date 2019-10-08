@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class FakeSpringApplication {
@@ -26,7 +27,7 @@ public class FakeSpringApplication {
             }
             BeanFactory.initBean(classes);
             HandlerManager.resolveMappingHandler(classes);
-        } catch (IOException | ClassNotFoundException | BeanInitException e) {
+        } catch (IOException | ClassNotFoundException | BeanInitException | URISyntaxException e) {
             e.printStackTrace();
         }
 

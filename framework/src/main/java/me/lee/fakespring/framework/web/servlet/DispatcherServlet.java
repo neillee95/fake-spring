@@ -7,6 +7,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -22,7 +23,7 @@ public class DispatcherServlet implements Servlet {
     }
 
     @Override
-    public void service(ServletRequest req, ServletResponse res) {
+    public void service(ServletRequest req, ServletResponse res) throws IOException {
         for (MappingHandler mappingHandler : HandlerManager.mappingHandlers) {
             try {
                 if (mappingHandler.handle(req, res)) {
@@ -32,6 +33,7 @@ public class DispatcherServlet implements Servlet {
                 e.printStackTrace();
             }
         }
+        ((HttpServletResponse)res).sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 
     @Override
