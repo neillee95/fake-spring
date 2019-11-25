@@ -3,10 +3,10 @@ package me.lee.fakespring.app;
 import me.lee.fakespring.framework.beans.Bean;
 
 @Bean
-class TestService {
+class EchoService {
 
     String echo(String msg) {
-        return "handle ~ " + msg;
+        return "You said \"" + msg + "\"";
     }
 
 }

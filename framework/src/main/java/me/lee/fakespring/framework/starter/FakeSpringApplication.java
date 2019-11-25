@@ -3,9 +3,10 @@ package me.lee.fakespring.framework.starter;
 import me.lee.fakespring.framework.beans.BeanFactory;
 import me.lee.fakespring.framework.core.ClassScanner;
 import me.lee.fakespring.framework.exception.BeanInitException;
+import me.lee.fakespring.framework.exception.WebServerException;
 import me.lee.fakespring.framework.web.handler.HandlerManager;
 import me.lee.fakespring.framework.web.server.EmbeddedTomcatServer;
-import org.apache.catalina.LifecycleException;
+import me.lee.fakespring.framework.web.server.EmbeddedWebServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,11 @@ public class FakeSpringApplication {
             e.printStackTrace();
         }
 
-        EmbeddedTomcatServer tomcatServer = new EmbeddedTomcatServer(args);
+        EmbeddedWebServer webServer = new EmbeddedTomcatServer(args);
         try {
-            tomcatServer.start();
-        } catch (LifecycleException e) {
-            e.printStackTrace();
+            webServer.start();
+        } catch (WebServerException e) {
+            webServer.stop();
         }
     }
 

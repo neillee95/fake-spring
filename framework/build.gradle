@@ -8,11 +8,11 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 11
 
 dependencies {
-    compile 'org.apache.tomcat.embed:tomcat-embed-core:9.0.22'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.26'
+    implementation("org.apache.tomcat.embed:tomcat-embed-core:9.0.22")
+    implementation("org.slf4j:slf4j-api:1.7.26")
+    implementation("org.slf4j:slf4j-log4j12:1.7.26")
 
-    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.61'
+    implementation("com.alibaba:fastjson:1.2.61")
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation("junit:junit:4.12")
 }

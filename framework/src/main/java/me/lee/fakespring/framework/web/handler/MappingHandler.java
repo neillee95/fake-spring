@@ -1,6 +1,5 @@
 package me.lee.fakespring.framework.web.handler;
 
-import com.alibaba.fastjson.JSON;
 import me.lee.fakespring.framework.beans.BeanFactory;
 import me.lee.fakespring.framework.web.annotation.RequestParam;
 
@@ -49,7 +48,7 @@ public class MappingHandler {
             }
             Object ctl = BeanFactory.getBean(controller);
             Object result = method.invoke(ctl, params);
-            resp.getWriter().write(JSON.toJSONString(result));
+            resp.getWriter().write(String.valueOf(result));
             return true;
         }
         return false;

@@ -6,14 +6,14 @@ import me.lee.fakespring.framework.web.annotation.RequestMapping;
 import me.lee.fakespring.framework.web.annotation.RequestParam;
 
 @Controller
-public class TestController {
+public class EchoController {
 
     @Autowired
-    private TestService testService;
+    private EchoService echoService;
 
     @RequestMapping("/echo")
-    public String test(@RequestParam(value = "msg", required = false, defaultValue = "null value") String msg) {
-        return testService.echo(msg);
+    public String echo(@RequestParam(value = "msg", required = false, defaultValue = "null value") String msg) {
+        return echoService.echo(msg);
     }
 
 }

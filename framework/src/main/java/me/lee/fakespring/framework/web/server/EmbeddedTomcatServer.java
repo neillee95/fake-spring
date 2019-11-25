@@ -1,5 +1,6 @@
 package me.lee.fakespring.framework.web.server;
 
+import me.lee.fakespring.framework.exception.WebServerException;
 import me.lee.fakespring.framework.web.servlet.DispatcherServlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
@@ -8,7 +9,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EmbeddedTomcatServer {
+public class EmbeddedTomcatServer implements EmbeddedWebServer {
 
     private static final Logger log = LoggerFactory.getLogger(EmbeddedTomcatServer.class);
 
@@ -20,7 +21,8 @@ public class EmbeddedTomcatServer {
         this.args = args;
     }
 
-    public void start() throws LifecycleException {
+    @Override
+    public void start() throws WebServerException {
         tomcat = new Tomcat();
         tomcat.setPort(8000);
         tomcat.getConnector();
@@ -38,27 +40,40 @@ public class EmbeddedTomcatServer {
         tomcat.getHost().addChild(context);
 
         //start tomcat server
-        tomcat.start();
-        log.info("Tomcat server started.");
-        Runtime.getRuntime().addShutdownHook(new Thread(null, () -> {
-            try {
-                stop();
-            } catch (LifecycleException e) {
-                e.printStackTrace();
-            }
-        }, "tomcat_shutdown_hook"));
+        try {
+            tomcat.start();
+            log.info("Tomcat server started.");
+            Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
+            awaitAfterStart();
+        } catch (Exception e) {
+            log.error("Cannot start tomcat", e);
+            throw new WebServerException();
+        }
+    }
 
-        Thread awaitThread = new Thread(null,
-                () -> tomcat.getServer().await(),
-                "tomcat_await_thread");
+    private void awaitAfterStart() {
+        if (tomcat == null) {
+            return;
+        }
+        Thread awaitThread = new Thread("tomcat_await_thread") {
+            @Override
+            public void run() {
+                tomcat.getServer().await();
+            }
+        };
         awaitThread.setDaemon(false);
         awaitThread.start();
     }
 
-    private void stop() throws LifecycleException {
+    @Override
+    public void stop() {
         if (tomcat != null) {
-            tomcat.stop();
-            log.info("Tomcat server stopped.");
+            try {
+                tomcat.stop();
+                tomcat.destroy();
+                log.info("Tomcat server stopped.");
+            } catch (LifecycleException ignore) {
+            }
         }
     }
 
